@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sermons &amp; Study Notes | Northern Beaches Christian Reformed Church</title>
-  <meta name="description" content="Watch recent Sunday worship sermons and download small group Bible study notes from Northern Beaches Christian Reformed Church in Dee Why.">
+  <meta name="description" content="Watch recent Sunday sermons to get a feel for the preaching, and download small group Bible study notes from Northern Beaches Christian Reformed Church in Dee Why.">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,79 +100,26 @@
           <span>Sermons &amp; Study Notes</span>
         </nav>
         <h1>Sermons &amp; Study Notes</h1>
-        <p class="lead">Listen to Sunday preaching from God&rsquo;s Word, search recent series, or download our small group study guides.</p>
+        <p class="lead">Recent Sunday sermons from our church &mdash; for those considering a visit, and for anyone who cannot make it in person.</p>
       </div>
     </section>
 
-    <!-- Featured Sermon -->
+    <!-- Featured Sermon (auto-updated by js/sermons.js) -->
     <section class="section section--compact">
       <div class="container">
-        <article class="sermon-feature reveal">
-          <div class="video-facade" role="button" tabindex="0" data-youtube-id="uGTuR4CsQqY" data-title="Love of the Word — Luke 24:13-27" aria-label="Play featured sermon: Love of the Word">
-            <img class="video-thumb" src="https://i.ytimg.com/vi/uGTuR4CsQqY/hqdefault.jpg" alt="Thumbnail for Sunday service 8 November 2026: Love of the Word" width="480" height="360">
-            <div class="video-overlay">
-              <span class="video-play-btn" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-              </span>
-              <span class="video-play-label">Watch Latest Service</span>
-            </div>
-          </div>
-          <div>
-            <span class="card-badge">Featured &middot; 8 November 2026</span>
-            <h2 style="margin-top: 0.7rem; font-size: 1.9rem;">Love of the Word</h2>
-            <p style="font-weight: 600; color: var(--navy-900); margin-bottom: 0.5rem;">Luke 24:13&ndash;27 &middot; Series: The 5 Loves</p>
-            <p>Walk alongside the two disciples on the road to Emmaus as Jesus opens the Scriptures and reveals how the whole Word points to Himself.</p>
-            <div class="btn-group" style="margin-top: 1rem;">
-              <a class="btn btn-navy btn-sm" href="https://www.youtube.com/@northernbeacheschristianre4875" target="_blank" rel="noopener noreferrer">Subscribe on YouTube</a>
-              <a class="btn btn-outline btn-sm" href="about.html#pastor">About Pastor Ben</a>
-            </div>
-          </div>
-        </article>
+        <article class="sermon-feature" id="featured-sermon"><div class="video-facade" role="button" tabindex="0" data-youtube-id="o0hCuqMFqHw" data-title="Love for the Lost &amp; Vulnerable" aria-label="Play sermon: Love for the Lost &amp; Vulnerable"><img class="video-thumb" src="https://i.ytimg.com/vi/o0hCuqMFqHw/hqdefault.jpg" alt="Thumbnail for Love for the Lost &amp; Vulnerable" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Latest Service</span></div></div><div><span class="card-badge">Latest Service &middot; 22 November 2026</span><h2 style="margin-top:0.7rem;font-size:1.9rem;">Love for the Lost &amp; Vulnerable</h2><p style="font-weight:600;color:var(--navy-900);margin-bottom:0.5rem;">Micah 6:6-8 &amp; John 3:14-21</p><p>In the month of November we have been looking at five key truths that we as a church want to live by. These key truths have been based around a key principle, the idea of…</p><div class="btn-group" style="margin-top:1rem;"><a class="btn btn-outline btn-sm" href="https://www.youtube.com/watch?v=o0hCuqMFqHw" target="_blank" rel="noopener noreferrer">Open on YouTube</a></div></div></article>
       </div>
     </section>
 
-    <!-- Searchable & Filterable Sermon Grid -->
+    <!-- Recent Sermons: 5 most recent + archive card (auto-updated by js/sermons.js) -->
     <section class="section section--warm" id="archive">
       <div class="container">
-        <div class="section-header-row" style="margin-bottom: 1.25rem;">
-          <div class="section-header">
-            <span class="eyebrow">2026 Message Library</span>
-            <h2>Browse Recent Sermons</h2>
-            <p id="sermon-count" style="margin:0; font-size:0.93rem;">Showing recent messages</p>
-          </div>
-          <div class="search-box">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <label class="sr-only" for="sermon-search">Search sermons by title, Bible passage, or speaker</label>
-            <input class="search-input" id="sermon-search" type="search" placeholder="Search passage, topic, or speaker">
-          </div>
+        <div class="section-header">
+          <span class="eyebrow">Recent Sunday Services</span>
+          <h2>Recent Sermons</h2>
+          <p class="lead">Get a feel for the preaching at our church, or catch up from home if you are unwell.</p>
         </div>
-
-        <div class="sermon-controls">
-          <div class="filter-pills" role="group" aria-label="Filter sermons by series">
-            <button class="filter-pill is-active" type="button" data-series="All" aria-pressed="true">All Series</button>
-            <button class="filter-pill" type="button" data-series="The 5 Loves" aria-pressed="false">The 5 Loves</button>
-            <button class="filter-pill" type="button" data-series="Questions &amp; Topics" aria-pressed="false">Questions &amp; Topics</button>
-            <button class="filter-pill" type="button" data-series="Sunday Services" aria-pressed="false">Sunday Services</button>
-            <button class="filter-pill" type="button" data-series="Nehemiah" aria-pressed="false">Nehemiah</button>
-          </div>
-        </div>
-
-        <div class="cards-grid" id="sermons-grid"></div>
-
-        <div class="card card--flat" id="sermons-empty" hidden style="text-align: center; max-width: 480px; margin: 2rem auto 0;">
-          <h3>No matching sermons found</h3>
-          <p>Try clearing your search keyword or switching back to All Series.</p>
-          <div>
-            <button class="btn btn-navy btn-sm" id="reset-sermons" type="button">Reset Filters</button>
-          </div>
-        </div>
-
-        <div class="callout reveal" style="margin-top: 2.25rem;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          <div>
-            <strong>Looking for older services (2015&ndash;2025)?</strong> Browse our full video archive on our <a href="https://www.youtube.com/@northernbeacheschristianre4875" target="_blank" rel="noopener noreferrer">YouTube Channel</a> or visit the legacy archive on <a href="https://deewhy.crca.org.au/sermons" target="_blank" rel="noopener noreferrer">deewhy.crca.org.au/sermons</a>.
-          </div>
-        </div>
+        <div class="cards-grid" id="sermons-grid"><article class="sermon-card"><div class="video-facade" role="button" tabindex="0" data-youtube-id="qJKts8mORNM" data-title="The Love of the Church" aria-label="Play sermon: The Love of the Church"><img class="video-thumb" src="https://i.ytimg.com/vi/qJKts8mORNM/hqdefault.jpg" alt="Thumbnail for The Love of the Church" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Service</span></div></div><div class="sermon-body"><div class="sermon-meta"><span>15 November 2026</span></div><h3>The Love of the Church</h3><p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">Baptism Service · Acts 2:41-47</p><p style="font-size:0.92rem;">This week we celebrate the baptism and profession of faith both Mary Habchy and Grace Green. These two women today publicly acknowledge their dependance on Jesus and their…</p></div></article><article class="sermon-card"><div class="video-facade" role="button" tabindex="0" data-youtube-id="uGTuR4CsQqY" data-title="Love of the Word" aria-label="Play sermon: Love of the Word"><img class="video-thumb" src="https://i.ytimg.com/vi/uGTuR4CsQqY/hqdefault.jpg" alt="Thumbnail for Love of the Word" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Service</span></div></div><div class="sermon-body"><div class="sermon-meta"><span>8 November 2026</span></div><h3>Love of the Word</h3><p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">Luke 24:13-27</p><p style="font-size:0.92rem;">This week we continue our series through the 5 Loves of the Church. Last week we looked at the love of God and our love for God, which is the source and foundation of it all.…</p></div></article><article class="sermon-card"><div class="video-facade" role="button" tabindex="0" data-youtube-id="4LoqQi1sxIg" data-title="The 5 Loves — Week 1 The Love of God" aria-label="Play sermon: The 5 Loves — Week 1 The Love of God"><img class="video-thumb" src="https://i.ytimg.com/vi/4LoqQi1sxIg/hqdefault.jpg" alt="Thumbnail for The 5 Loves — Week 1 The Love of God" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Service</span></div></div><div class="sermon-body"><div class="sermon-meta"><span>1 November 2026</span></div><h3>The 5 Loves — Week 1 The Love of God</h3><p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">1 John 4:7-21</p><p style="font-size:0.92rem;">This week we being our membership month, focusing in on the five loves we as a church profess to be about. These five loves are drawn from the Bible and express what we feel…</p></div></article><article class="sermon-card"><div class="video-facade" role="button" tabindex="0" data-youtube-id="O-EZ7FzASzU" data-title="Laodicea, the apathetic church. Rev 3:14-22" aria-label="Play sermon: Laodicea, the apathetic church. Rev 3:14-22"><img class="video-thumb" src="https://i.ytimg.com/vi/O-EZ7FzASzU/hqdefault.jpg" alt="Thumbnail for Laodicea, the apathetic church. Rev 3:14-22" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Service</span></div></div><div class="sermon-body"><div class="sermon-meta"><span>25 October 2026</span></div><h3>Laodicea, the apathetic church. Rev 3:14-22</h3><p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">Steven Goring</p><p style="font-size:0.92rem;">Sunday morning worship service at Northern Beaches Christian Reformed Church in Dee Why.</p></div></article><article class="sermon-card"><div class="video-facade" role="button" tabindex="0" data-youtube-id="VJdwKPJRLYI" data-title="Sunday Worship Service" aria-label="Play sermon: Sunday Worship Service"><img class="video-thumb" src="https://i.ytimg.com/vi/VJdwKPJRLYI/hqdefault.jpg" alt="Thumbnail for Sunday Worship Service" width="480" height="360" loading="lazy"><div class="video-overlay"><span class="video-play-btn" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg></span><span class="video-play-label">Watch Service</span></div></div><div class="sermon-body"><div class="sermon-meta"><span>18 October 2026</span></div><h3>Sunday Worship Service</h3><p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">Morning Worship at 58 Fisher Road</p><p style="font-size:0.92rem;">Sunday morning worship service at Northern Beaches Christian Reformed Church in Dee Why.</p></div></article><article class="sermon-archive-card"><h3>Looking for Older Sermons?</h3><p>Our full sermon archive lives on YouTube. Open our channel and use the search box there to find a Bible passage, topic or date.</p><a class="btn btn-primary btn-sm" href="https://www.youtube.com/@northernbeacheschristianre4875/videos" target="_blank" rel="noopener noreferrer">Browse &amp; Search on YouTube</a></article></div>
       </div>
     </section>
 

@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Northern Beaches Christian Reformed Church
    Coastal Sunlit Editorial Design System
    ========================================================================== */
@@ -1380,71 +1380,33 @@ body.has-hero .site-header:not(.is-scrolled) .menu-toggle {
   color: var(--text-muted);
 }
 
-/* Sermon Search & Filter Controls */
-.sermon-controls {
+/* Archive card (6th sermon card) */
+.sermon-archive-card {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.75rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.75rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(155deg, var(--navy-900) 0%, var(--navy-950) 100%);
+  border-top: 3px solid var(--gold-400);
+  box-shadow: var(--shadow-sm);
 }
 
-.filter-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.filter-pill {
-  padding: 0.48rem 0.95rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  font-size: 0.86rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.filter-pill:hover {
-  border-color: var(--navy-900);
-}
-
-.filter-pill.is-active {
-  background: var(--navy-900);
-  border-color: var(--navy-900);
+.sermon-archive-card h3 {
   color: #ffffff;
+  margin: 0;
 }
 
-.search-box {
-  position: relative;
-  width: min(100%, 340px);
+.sermon-archive-card p {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.95rem;
+  margin: 0;
 }
 
-.search-box svg {
-  position: absolute;
-  left: 0.9rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-  pointer-events: none;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.62rem 1rem 0.62rem 2.55rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
-  background: var(--bg-surface);
-  font-size: 0.92rem;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--navy-900);
-  box-shadow: 0 0 0 3px rgba(22, 42, 90, 0.12);
+.sermon-archive-card .btn {
+  align-self: flex-start;
+  margin-top: 0.5rem;
 }
 
 /* Pastor Card */

@@ -1,0 +1,40 @@
+# Optional GitHub Actions workflow to mirror new YouTube sermons into data/sermons.json.
+# To activate: copy this file to .github/workflows/sync-sermons.yml on GitHub.
+
+name: Sync YouTube Sermons
+
+on:
+  schedule:
+    # Sundays at 04:00 UTC (~2pm-3pm Sydney) and Wednesdays at 04:00 UTC
+    - cron: '0 4 * * 0,3'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Fetch latest sermons from YouTube RSS
+        run: node scripts/sync-sermons.mjs
+
+      - name: Commit updated sermons.json if changed
+        run: |
+          if git diff --quiet data/sermons.json; then
+            echo "No new sermons found."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sermons.json
+          git commit -m "chore: sync latest sermons from YouTube"
+          git push

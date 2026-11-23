@@ -1,246 +1,166 @@
 (function () {
   'use strict';
 
-  const SERMONS = [
-    {
-      date: '2026-11-08',
-      displayDate: '8 November 2026',
-      title: 'Love of the Word',
-      scripture: 'Luke 24:13-27',
-      series: 'The 5 Loves',
-      speaker: 'Pastor Ben Peletier',
-      youtubeId: 'uGTuR4CsQqY',
-      note: 'Morning worship service exploring how all of Scripture points to Jesus Christ.'
-    },
-    {
-      date: '2026-11-01',
-      displayDate: '1 November 2026',
-      title: 'The Love of God (Week 1)',
-      scripture: '1 John 4:7-21',
-      series: 'The 5 Loves',
-      speaker: 'Pastor Ben Peletier',
-      youtubeId: '4LoqQi1sxIg',
-      note: 'Opening message in The 5 Loves series — grounding the life of the church in God’s love.'
-    },
-    {
-      date: '2026-10-25',
-      displayDate: '25 October 2026',
-      title: 'Sunday Worship Service — 25 October 2026',
-      scripture: '',
-      series: 'Sunday Services',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'O-EZ7FzASzU',
-      note: 'Full Sunday morning worship gathering at 58 Fisher Road, Dee Why.'
-    },
-    {
-      date: '2026-10-18',
-      displayDate: '18 October 2026',
-      title: 'Sunday Worship Service — 18 October 2026',
-      scripture: '',
-      series: 'Sunday Services',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'VJdwKPJRLYI',
-      note: 'Full Sunday morning worship gathering at 58 Fisher Road, Dee Why.'
-    },
-    {
-      date: '2026-10-11',
-      displayDate: '11 October 2026',
-      title: 'Faithful, Not Compromising',
-      scripture: 'Revelation 2:12-17',
-      series: 'Sunday Services',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'VLvdJm-W0M0',
-      note: 'Encouragement to hold fast to Christ’s name and truth without compromise.'
-    },
-    {
-      date: '2026-10-04',
-      displayDate: '4 October 2026',
-      title: "The Gospel Ain't No Snake Oil",
-      scripture: '',
-      series: 'Questions & Topics',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'ePpe8CHpgKw',
-      note: 'Addressing real questions about the truth and integrity of the Christian gospel.'
-    },
-    {
-      date: '2026-09-27',
-      displayDate: '27 September 2026',
-      title: 'What Does Israel Mean to Us Today?',
-      scripture: '',
-      series: 'Questions & Topics',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'ImoWycHFBjE',
-      note: 'Exploring biblical theology on Israel and God’s promises in the gospel.'
-    },
-    {
-      date: '2026-09-20',
-      displayDate: '20 September 2026',
-      title: 'Battle of the Sexes',
-      scripture: 'Genesis 3:8-19 & Galatians 3:27-29',
-      series: 'Questions & Topics',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'ZxPn2OQkdQ4',
-      note: 'How the Fall broke human harmony and how Christ restores dignity and unity.'
-    },
-    {
-      date: '2026-08-30',
-      displayDate: '30 August 2026',
-      title: 'The Hardest Part',
-      scripture: 'Luke 18:18-30',
-      series: 'Sunday Services',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: 'CGxBUmohdaY',
-      note: 'Jesus’ encounter with the rich ruler and what is possible only with God.'
-    },
-    {
-      date: '2026-08-23',
-      displayDate: '23 August 2026',
-      title: "Living in Our New-Found Freedom",
-      scripture: '',
-      series: 'Sunday Services',
-      speaker: 'K. Degan (Guest Speaker)',
-      youtubeId: 'NANOfeKjpFo',
-      note: 'What does it look like for God’s people to live in their new-found freedom?'
-    },
-    {
-      date: '2026-08-09',
-      displayDate: '9 August 2026',
-      title: 'Pulling Your Hair Out',
-      scripture: 'Nehemiah 13',
-      series: 'Nehemiah',
-      speaker: 'Northern Beaches CRC',
-      youtubeId: '',
-      transcriptUrl: 'assets/docs/nehemiah-13-transcript.pdf',
-      note: 'Audio recording was unavailable for this service; the full readable sermon transcript PDF is available below.'
+  var CHANNEL_ID = 'UCHANK81tcUfJrLC3d3hID1g';
+  var CHANNEL_VIDEOS_URL = 'https://www.youtube.com/@northernbeacheschristianre4875/videos';
+  var FEED_URL = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
+  var LIVE_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(FEED_URL);
+  var CACHE_KEY = 'nbcrc-sermons-live-v1';
+  var CACHE_MS = 15 * 60 * 1000;
+
+  var featuredEl = document.getElementById('featured-sermon');
+  var gridEl = document.getElementById('sermons-grid');
+  var homeFeaturedEl = document.getElementById('home-featured-sermon');
+  var homeRecentEl = document.getElementById('home-recent-sermons');
+  if (!featuredEl && !gridEl && !homeFeaturedEl && !homeRecentEl) return;
+
+  /* ---------- helpers ---------- */
+  function decode(str) {
+    var t = document.createElement('textarea');
+    t.innerHTML = str || '';
+    return t.value;
+  }
+  function esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  var MONTHS = { jan: 'January', feb: 'February', mar: 'March', apr: 'April', may: 'May', jun: 'June', jul: 'July', aug: 'August', sep: 'September', oct: 'October', nov: 'November', dec: 'December' };
+
+  function serviceDate(rawTitle, published) {
+    var m = rawTitle.match(/\b(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*(?:\s+(\d{4}))?\b/i);
+    var pub = new Date(published);
+    if (m) {
+      var yr = m[3] || (isNaN(pub) ? new Date().getFullYear() : pub.getUTCFullYear());
+      return parseInt(m[1], 10) + ' ' + MONTHS[m[2].toLowerCase()] + ' ' + yr;
     }
-  ];
+    if (isNaN(pub)) return '';
+    return new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Australia/Sydney' }).format(pub);
+  }
 
-  const grid = document.getElementById('sermons-grid');
-  const searchInput = document.getElementById('sermon-search');
-  const filterButtons = document.querySelectorAll('.filter-pill');
-  const countEl = document.getElementById('sermon-count');
-  const emptyState = document.getElementById('sermons-empty');
-  const resetBtn = document.getElementById('reset-sermons');
-
-  if (!grid) return;
-
-  let activeSeries = 'All';
-  let searchQuery = '';
-
-  const renderSermons = () => {
-    const q = searchQuery.trim().toLowerCase();
-
-    const filtered = SERMONS.filter((s) => {
-      const matchesSeries = activeSeries === 'All' || s.series === activeSeries;
-      if (!matchesSeries) return false;
-      if (!q) return true;
-      const haystack = `${s.title} ${s.scripture} ${s.series} ${s.speaker} ${s.displayDate} ${s.note}`.toLowerCase();
-      return haystack.includes(q);
-    });
-
-    if (countEl) {
-      countEl.textContent = `Showing ${filtered.length} of ${SERMONS.length} recent messages`;
+  function parseTitle(rawTitle) {
+    var raw = decode(rawTitle).replace(/\s+/g, ' ').trim();
+    var dateOnly = /^(?:(?:Worship\s+Service|Sunday\s+Service|Service|Sunday)\s+)?\d{1,2}\s+[A-Za-z]{3,9}(?:\s+\d{4})?$/i;
+    if (dateOnly.test(raw)) {
+      return { title: 'Sunday Worship Service', subtitle: 'Morning Worship at 58 Fisher Road', raw: raw };
     }
-
-    if (filtered.length === 0) {
-      grid.innerHTML = '';
-      if (emptyState) emptyState.hidden = false;
-      return;
+    var body = raw
+      .replace(/^(?:Worship\s+Service|Sunday\s+Service|Service|Sunday)\s+\d{1,2}\s+[A-Za-z]{3,9}(?:\s+\d{4})?\s*[-–:]\s*/i, '')
+      .replace(/^\d{1,2}\s+[A-Za-z]{3,9}(?:\s+\d{4})?\s*[-–:]\s*/i, '');
+    var parts = body.split(/\s+[-–]\s+/).map(function (p) { return p.replace(/^Sermon\s*:\s*/i, '').trim(); })
+      .filter(function (p) { return p && !/^Sermon(?:\s+Series)?$/i.test(p); });
+    if (!parts.length) parts = [raw];
+    var occasion = '';
+    if (parts.length > 1 && /^(?:Baptism|Communion|Good\s+Friday|Christmas(?:\s+Day)?|Easter|Thanksgiving)\s+Service$/i.test(parts[0])) {
+      occasion = parts.shift();
     }
+    var meta = [];
+    var scripture = /(?:\d\s+)?[A-Z][a-z]{1,14}\s+\d{1,3}\s*:\s*\d{1,3}/;
+    var speaker = /^(?:[A-Z]\.?\s+[A-Z][a-z]+|[A-Z][a-z]+\s+[A-Z][a-z]+)$/;
+    while (parts.length > 1) {
+      var last = parts[parts.length - 1];
+      if (scripture.test(last) || speaker.test(last)) meta.unshift(parts.pop()); else break;
+    }
+    return { title: parts.join(' — '), subtitle: [occasion].concat(meta).filter(Boolean).join(' · '), raw: raw };
+  }
 
-    if (emptyState) emptyState.hidden = true;
+  function excerpt(desc, raw) {
+    var n = decode(desc).replace(/\s+/g, ' ').trim();
+    if (!n || n.toLowerCase() === raw.toLowerCase()) return 'Sunday morning worship service at Northern Beaches Christian Reformed Church in Dee Why.';
+    if (n.length <= 175) return n;
+    var cut = n.slice(0, 175), sp = cut.lastIndexOf(' ');
+    return (sp > 100 ? cut.slice(0, sp) : cut).trim() + '…';
+  }
 
-    grid.innerHTML = filtered
-      .map((s) => {
-        const mediaHtml = s.youtubeId
-          ? `
-            <div class="video-facade" role="button" tabindex="0" data-youtube-id="${s.youtubeId}" data-title="${escapeAttr(s.title)}" aria-label="Play sermon video: ${escapeAttr(s.title)}">
-              <img class="video-thumb" src="https://i.ytimg.com/vi/${s.youtubeId}/hqdefault.jpg" alt="Video thumbnail for ${escapeAttr(s.title)}" loading="lazy" width="480" height="360">
-              <div class="video-overlay">
-                <span class="video-play-btn" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-                </span>
-                <span class="video-play-label">Watch Service</span>
-              </div>
-            </div>
-          `
-          : `
-            <div class="sermon-placeholder">
-              <span class="card-badge card-badge--amber">Transcript Available</span>
-              <h4 style="color:#ffffff; margin:0.25rem 0 0;">${escapeHtml(s.title)}</h4>
-              <p style="font-size:0.86rem; color:rgba(255,255,255,0.78); margin:0;">No audio recorded on this Sunday — read the full sermon transcript PDF.</p>
-            </div>
-          `;
+  function fromLive(items) {
+    return items.map(function (it) {
+      var id = String(it.guid || '').replace(/^yt:video:/, '');
+      var p = parseTitle(it.title);
+      if (!id || /^test(?:\s+[a-z0-9]{1,3})?$/i.test(p.raw)) return null;
+      var published = String(it.pubDate || '').replace(' ', 'T') + 'Z';
+      return {
+        youtubeId: id,
+        displayDate: serviceDate(p.raw, published),
+        title: p.title,
+        subtitle: p.subtitle,
+        summary: excerpt(it.description || '', p.raw)
+      };
+    }).filter(Boolean);
+  }
 
-        const actionHtml = s.transcriptUrl
-          ? `<div class="card-footer"><a class="btn btn-outline btn-sm" href="${s.transcriptUrl}" target="_blank" rel="noopener noreferrer">Download Transcript (PDF)</a></div>`
-          : `<div class="card-footer"><a class="text-link" href="https://www.youtube.com/watch?v=${s.youtubeId}" target="_blank" rel="noopener noreferrer">Open on YouTube</a></div>`;
+  /* ---------- rendering ---------- */
+  var PLAY = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"/></svg>';
 
-        return `
-          <article class="sermon-card">
-            ${mediaHtml}
-            <div class="sermon-body">
-              <div class="sermon-meta">
-                <span class="card-badge">${escapeHtml(s.series)}</span>
-                <span>${escapeHtml(s.displayDate)}</span>
-              </div>
-              <h3 style="margin:0.25rem 0 0.15rem;">${escapeHtml(s.title)}</h3>
-              ${s.scripture ? `<p style="font-weight:600; color:var(--navy-900); margin:0 0 0.35rem; font-size:0.93rem;">${escapeHtml(s.scripture)} &middot; ${escapeHtml(s.speaker)}</p>` : `<p style="font-weight:600; color:var(--navy-900); margin:0 0 0.35rem; font-size:0.93rem;">${escapeHtml(s.speaker)}</p>`}
-              <p style="font-size:0.92rem; margin:0 0 0.5rem;">${escapeHtml(s.note)}</p>
-              ${actionHtml}
-            </div>
-          </article>
-        `;
+  function facade(s, label) {
+    return '<div class="video-facade" role="button" tabindex="0" data-youtube-id="' + esc(s.youtubeId) + '" data-title="' + esc(s.title) + '" aria-label="Play sermon: ' + esc(s.title) + '">' +
+      '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(s.youtubeId) + '/hqdefault.jpg" alt="Thumbnail for ' + esc(s.title) + '" width="480" height="360" loading="lazy">' +
+      '<div class="video-overlay"><span class="video-play-btn" aria-hidden="true">' + PLAY + '</span><span class="video-play-label">' + esc(label) + '</span></div></div>';
+  }
+
+  function featuredHtml(s) {
+    return facade(s, 'Watch Latest Service') +
+      '<div><span class="card-badge">Latest Service &middot; ' + esc(s.displayDate) + '</span>' +
+      '<h2 style="margin-top:0.7rem;font-size:1.9rem;">' + esc(s.title) + '</h2>' +
+      (s.subtitle ? '<p style="font-weight:600;color:var(--navy-900);margin-bottom:0.5rem;">' + esc(s.subtitle) + '</p>' : '') +
+      '<p>' + esc(s.summary) + '</p>' +
+      '<div class="btn-group" style="margin-top:1rem;"><a class="btn btn-outline btn-sm" href="https://www.youtube.com/watch?v=' + esc(s.youtubeId) + '" target="_blank" rel="noopener noreferrer">Open on YouTube</a></div></div>';
+  }
+
+  function cardHtml(s) {
+    return '<article class="sermon-card">' + facade(s, 'Watch Service') +
+      '<div class="sermon-body"><div class="sermon-meta"><span>' + esc(s.displayDate) + '</span></div>' +
+      '<h3>' + esc(s.title) + '</h3>' +
+      (s.subtitle ? '<p style="font-weight:600;color:var(--navy-900);font-size:0.9rem;margin:0;">' + esc(s.subtitle) + '</p>' : '') +
+      '<p style="font-size:0.92rem;">' + esc(s.summary) + '</p></div></article>';
+  }
+
+  function archiveHtml() {
+    return '<article class="sermon-archive-card"><h3>Looking for Older Sermons?</h3>' +
+      '<p>Our full sermon archive lives on YouTube. Open our channel and use the search box there to find a Bible passage, topic or date.</p>' +
+      '<a class="btn btn-primary btn-sm" href="' + CHANNEL_VIDEOS_URL + '" target="_blank" rel="noopener noreferrer">Browse &amp; Search on YouTube</a></article>';
+  }
+
+  function setIfIdle(el, html) {
+    if (!el || el.querySelector('[data-mounted="true"]')) return;
+    el.innerHTML = html;
+  }
+
+  function render(list) {
+    if (!list || !list.length) return;
+    var key = list.slice(0, 6).map(function (s) { return s.youtubeId; }).join(',');
+    if (render.last === key) return;
+    render.last = key;
+    setIfIdle(featuredEl, featuredHtml(list[0]));
+    setIfIdle(gridEl, list.slice(1, 6).map(cardHtml).join('') + archiveHtml());
+    setIfIdle(homeFeaturedEl, featuredHtml(list[0]));
+    setIfIdle(homeRecentEl, list.slice(1, 4).map(cardHtml).join(''));
+  }
+
+  /* ---------- data: static baseline, then live check ---------- */
+  function liveCheck() {
+    try {
+      var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+      if (cached && Date.now() - cached.t < CACHE_MS) { render(cached.list); return; }
+    } catch (e) { /* ignore */ }
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 4000) : null;
+    fetch(LIVE_URL, ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || j.status !== 'ok' || !j.items) return;
+        var list = fromLive(j.items);
+        if (!list.length) return;
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), list: list })); } catch (e) { /* ignore */ }
+        render(list);
       })
-      .join('');
-  };
-
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach((b) => {
-        b.classList.remove('is-active');
-        b.setAttribute('aria-pressed', 'false');
-      });
-      btn.classList.add('is-active');
-      btn.setAttribute('aria-pressed', 'true');
-      activeSeries = btn.dataset.series || 'All';
-      renderSermons();
-    });
-  });
-
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      searchQuery = e.target.value;
-      renderSermons();
-    });
+      .catch(function () { /* offline or rate-limited: keep baseline */ })
+      .then(function () { if (timer) clearTimeout(timer); });
   }
 
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      activeSeries = 'All';
-      searchQuery = '';
-      if (searchInput) searchInput.value = '';
-      filterButtons.forEach((b) => {
-        const isAll = (b.dataset.series || '') === 'All';
-        b.classList.toggle('is-active', isAll);
-        b.setAttribute('aria-pressed', String(isAll));
-      });
-      renderSermons();
-    });
-  }
-
-  renderSermons();
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  function escapeAttr(str) {
-    return escapeHtml(str);
-  }
+  fetch('data/sermons.json')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) { if (d && d.sermons) render(d.sermons); })
+    .catch(function () { /* keep static markup */ })
+    .then(liveCheck);
 })();

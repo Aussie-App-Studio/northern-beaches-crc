@@ -30,3 +30,10 @@ Then open `http://localhost:4173`.
 2. Verify whether an evening service or updated holiday schedule should be noted on `visit.html`.
 3. Optionally point `#contact-form` in `contact.html` / `js/main.js` to a static-site form endpoint (e.g. Formspree or Web3Forms) if server-side email forwarding is preferred over the visitor's email client.
 4. Add a `CNAME` file when switching DNS to `deewhy.crca.org.au`, and update `robots.txt` and `sitemap.xml` URLs accordingly.
+
+## Automatic Sermon Updates (YouTube)
+The Sermons page and homepage show the latest upload as a featured sermon, then the next recent sermons, with a final card linking to the YouTube channel for older sermons. No YouTube login or API key is needed - the public channel feed (`UCHANK81tcUfJrLC3d3hID1g`) is used.
+
+- **Live check (works on any host):** `js/sermons.js` renders `data/sermons.json` instantly, then checks the channel's public feed and swaps in any newer uploads (cached 15 minutes). New Sunday uploads appear automatically.
+- **Optional scheduled sync:** `scripts/sync-sermons.mjs` refreshes `data/sermons.json` (run `node scripts/sync-sermons.mjs`). `scripts/sync-sermons.yml` is a ready GitHub Actions workflow (Sundays and Wednesdays). To activate, copy it to `.github/workflows/sync-sermons.yml` (via the GitHub web UI, or after `gh auth refresh -s workflow`).
+- Untitled/test uploads are skipped, and uploads titled only with a date show as "Sunday Worship Service".
