@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aussie-app-studio.github.io/northern-beaches-crc/sitemap.xml
